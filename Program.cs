@@ -6,7 +6,7 @@
  If you read this and decided that you are better then me in c# (which lets face it you probably are) please submit 
 
  Future Plans are to also add a receive function (maybe even opening a second Console window so the programm can send and receive at the same time idk)
- 
+ test
  */
 
 using System.Linq.Expressions;
