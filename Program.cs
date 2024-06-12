@@ -121,7 +121,9 @@ while (progRun == true)
         Console.WriteLine("");
         Console.WriteLine("enter -i for Int, -b for boolean, -f for float or -s for string");
         Console.WriteLine("");
-        Console.WriteLine("enter 'receive' to start a receiver, IP and port will be asked in new dialog");
+        Console.WriteLine("enter 'receive' to start a receiver, port will be asked in new dialog");
+        Console.WriteLine("");
+        Console.WriteLine("enter 'receive -stop' to stop the receiver thread");
         Console.WriteLine("");
         Console.WriteLine("enter 'exit' to exit");
         Console.Write(">");
