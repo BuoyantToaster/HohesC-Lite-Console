@@ -4,7 +4,7 @@
  But hey here I go making this and even though it looks like absolute ass, I guess it works?! (so far at least)
 
  If you read this and decided that you are better then me in c# (which lets face it you probably are) please submit 
-
+ 
  */
 
 using System.Linq.Expressions;
@@ -103,7 +103,7 @@ while (progRun == true)
 
         Thread receiverThread = new Thread(() => receiverStart(port));
         receiverThread.Start();
-        Console.Write(">");
+        //Console.Write(">");
     }
     if (temp == stprcv)
     {
@@ -232,7 +232,6 @@ void receiverStart(int port)
     }
     else
     {
-        port = 9000;
         Console.WriteLine("Port has been set to: " + port);
     }
 
