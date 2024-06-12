@@ -34,8 +34,6 @@ bool progRun = true;
 bool recRun = true;
 string temp;
 
-// Create a CancellationTokenSource
-CancellationTokenSource cts = new CancellationTokenSource();
 //list of valid commands
 string ipconfig = "ipconfig";
 string cmsgi = "custom -i";
@@ -103,7 +101,7 @@ while (progRun == true)
     {
         recRun = true;
 
-        Thread receiverThread = new Thread(() => receiverStart(port, cts.Token));
+        Thread receiverThread = new Thread(() => receiverStart(port));
         receiverThread.Start();
         Console.Write(">");
     }
@@ -222,7 +220,7 @@ void SendOscMessage<T>(string ipAddress, int port, string oscmsg, T messageValue
     }
 }
 
-void receiverStart(int port, CancellationToken token)
+void receiverStart(int port)
 {
     Console.WriteLine("To change receiver port, enter a port, to receive on sender port, leave blank");
     Console.Write(">");
@@ -244,7 +242,7 @@ void receiverStart(int port, CancellationToken token)
         receiver.Connect();
 
         Console.WriteLine("Listening for OSC messages on port " + port);
-
+        Console.Write(">");
         // Run the loop to receive messages
         while (recRun)
         {
@@ -273,6 +271,7 @@ static void HandleOscMessage(OscMessage message)
 
     foreach (var arg in message)
     {
-        Console.WriteLine("Argument: " + arg.ToString());
+        Console.WriteLine(">Argument: " + arg.ToString());
     }
+    Console.Write(">");
 }
