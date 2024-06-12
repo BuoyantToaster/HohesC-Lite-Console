@@ -5,11 +5,12 @@
 
  If you read this and decided that you are better then me in c# (which lets face it you probably are) please submit 
 
- Future Plans are to also add a receive function (maybe even opening a second Console window so the programm can send and receive at the same time idk)
- test
+ Future Plans are to also add a receive function
  */
 
 using System.Linq.Expressions;
+using System;
+using System.Threading;
 using System.Net;
 using Rug.Osc;
 
@@ -27,18 +28,22 @@ Console.WriteLine("load profiles. ");
 //address as well as port for for the messageing instance
 string ipAddress;
 int port;
+int rcvport;
 
 //temporary variables
 bool progRun = true;
 string temp;
 
-
+// Create a CancellationTokenSource
+CancellationTokenSource cts = new CancellationTokenSource();
 //list of valid commands
 string ipconfig = "ipconfig";
 string cmsgi = "custom -i";
 string cmsgb = "custom -b";
 string cmsgf = "custom -f";
 string cmsgs = "custom -s";
+string rcv = "receive";
+string stprcv = "receive -stop";
 string help = "help";
 string exit = "exit";
 
@@ -72,7 +77,7 @@ if (temp.Length > 0)
 else
 {
     port = 9000;
-    Console.WriteLine("IP Address has been set to: " + port);
+    Console.WriteLine("Port has been set to: " + port);
 }
 
 Console.WriteLine("enter 'help' to see all valid commads");
@@ -92,7 +97,19 @@ while (progRun == true)
         Console.Write(">");
         temp = Console.ReadLine();
         port = int.Parse(temp);
+        Console.Write(">");
+    }
+    if (temp == rcv)
+    {
 
+
+        Thread receiverThread = new Thread(() => receiverStart(port, cts.Token));
+        receiverThread.Start();
+    }
+    if (temp == stprcv)
+    {
+        // Signal cancellation
+        cts.Cancel();
     }
     if (temp == help)
     {
@@ -103,6 +120,8 @@ while (progRun == true)
         Console.WriteLine("enter 'custom' to send to a custom address");
         Console.WriteLine("");
         Console.WriteLine("enter -i for Int, -b for boolean, -f for float or -s for string");
+        Console.WriteLine("");
+        Console.WriteLine("enter 'receive' to start a receiver, IP and port will be asked in new dialog");
         Console.WriteLine("");
         Console.WriteLine("enter 'exit' to exit");
         Console.Write(">");
@@ -196,5 +215,59 @@ void SendOscMessage<T>(string ipAddress, int port, string oscmsg, T messageValue
     catch (Exception e)
     {
         Console.WriteLine(e);
+    }
+}
+
+static void receiverStart(int port, CancellationToken token)
+{
+    Console.WriteLine("To change receiver port, enter a port, to receive on sender port, leave blank");
+    Console.Write(">");
+    string temp = Console.ReadLine();
+
+    if (temp.Length > 0)
+    {
+        port = int.Parse(temp);
+    }
+    else
+    {
+        port = 9000;
+        Console.WriteLine("Port has been set to: " + port);
+    }
+
+    using (OscReceiver receiver = new OscReceiver(port))
+    {
+        // Connect the receiver
+        receiver.Connect();
+
+        Console.WriteLine("Listening for OSC messages on port " + port);
+
+        // Run the loop to receive messages
+        while (!Console.KeyAvailable)
+        {
+            if (receiver.State == OscSocketState.Connected)
+            {
+                if (receiver.TryReceive(out OscPacket packet))
+                {
+                    if (packet is OscMessage message)
+                    {
+                        // Handle the received message
+                        HandleOscMessage(message);
+                    }
+                }
+            }
+        }
+
+        // Disconnect the receiver
+        receiver.Close();
+    }
+}
+static void HandleOscMessage(OscMessage message)
+{
+    // Display the address and arguments of the received message
+    Console.WriteLine("Received OSC message: " + message.Address);
+
+    foreach (var arg in message)
+    {
+        Console.WriteLine("Argument: " + arg.ToString());
     }
 }
