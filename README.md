@@ -12,5 +12,5 @@ I plan to integrate loading profiles and sending of pre made lists. (mostlikely 
 Additionally I want to create a better Version of the software that uses a GUI.
 
 ## Download
-The last compiled release DOES NOT contain the receive function yet!
-For the compiled pre release please visit the [releases ](https://github.com/BuoyantToaster/HohesC-Lite-Console/releases/tag/v0.0.1)tab.
+If you don't want to compile your self, you can get a compiled version of the software in the [releases ](https://github.com/BuoyantToaster/HohesC-Lite-Console/releases)tab.
+If you run into any trouble with the software, don't hesitate to contact me.
