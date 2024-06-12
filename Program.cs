@@ -31,6 +31,7 @@ int rcvport;
 
 //temporary variables
 bool progRun = true;
+bool recRun = true;
 string temp;
 
 // Create a CancellationTokenSource
@@ -100,15 +101,16 @@ while (progRun == true)
     }
     if (temp == rcv)
     {
-
+        recRun = true;
 
         Thread receiverThread = new Thread(() => receiverStart(port, cts.Token));
         receiverThread.Start();
+        Console.Write(">");
     }
     if (temp == stprcv)
     {
-        // Signal cancellation
-        cts.Cancel();
+        recRun = false;
+        Console.Write(">");
     }
     if (temp == help)
     {
@@ -149,6 +151,7 @@ while (progRun == true)
     }
     if (temp == exit)
     {
+        recRun = false;
         progRun = false;
     }
 }
@@ -219,11 +222,11 @@ void SendOscMessage<T>(string ipAddress, int port, string oscmsg, T messageValue
     }
 }
 
-static void receiverStart(int port, CancellationToken token)
+void receiverStart(int port, CancellationToken token)
 {
     Console.WriteLine("To change receiver port, enter a port, to receive on sender port, leave blank");
     Console.Write(">");
-    string temp = Console.ReadLine();
+    temp = Console.ReadLine();
 
     if (temp.Length > 0)
     {
@@ -243,7 +246,7 @@ static void receiverStart(int port, CancellationToken token)
         Console.WriteLine("Listening for OSC messages on port " + port);
 
         // Run the loop to receive messages
-        while (!Console.KeyAvailable)
+        while (recRun)
         {
             if (receiver.State == OscSocketState.Connected)
             {
@@ -260,6 +263,7 @@ static void receiverStart(int port, CancellationToken token)
 
         // Disconnect the receiver
         receiver.Close();
+        Console.WriteLine("Receiver stoped");
     }
 }
 static void HandleOscMessage(OscMessage message)
