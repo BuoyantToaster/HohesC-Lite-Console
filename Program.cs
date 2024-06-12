@@ -5,7 +5,6 @@
 
  If you read this and decided that you are better then me in c# (which lets face it you probably are) please submit 
 
- Future Plans are to also add a receive function
  */
 
 using System.Linq.Expressions;
