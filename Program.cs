@@ -21,9 +21,9 @@ Console.ForegroundColor = ConsoleColor.Green;
 
 //Console.WriteLine("Wittle tiny console for sending OSC messages OwO");//If you wead dis and fwought that I am a silly Furry, then you aw indeed cowect ÒwÓ
 Console.WriteLine("Welcome to HohesC Lite!");
-Console.WriteLine("This is an work in progress console application designed to send and in the future");
-Console.WriteLine("also receive OSC messages. As of now it is unfortunately not possible to save and");
-Console.WriteLine("load profiles. ");
+Console.WriteLine("This is an work in progress console application designed to send and receive.");
+Console.WriteLine("As of now it is unfortunately not possible to save and load profiles. ");
+Console.WriteLine("though that is planed in the future.");
 
 //address as well as port for for the messageing instance
 string ipAddress;
